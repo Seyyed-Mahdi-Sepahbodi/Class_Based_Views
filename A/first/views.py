@@ -9,12 +9,18 @@ from django.views.generic.list import ListView
 
 from django.views.generic.detail import DetailView
 
-from django.views.generic.edit import FormView
-from .forms import TodoCreateForm
+# from django.views.generic.edit import FormView
+# from .forms import TodoCreateForm
 
 from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.contrib import messages
+
+from django.views.generic.edit import CreateView
+
+from django.views.generic.edit import DeleteView
+
+from django.views.generic.edit import UpdateView
 
 # Create your views here.
 
@@ -66,17 +72,43 @@ class DetailTodo(DetailView):
             return Todo.objects.none()
 
             
-class TodoCreateView(FormView):
-    form_class = TodoCreateForm
+# class TodoCreateView(FormView):
+#     form_class = TodoCreateForm
+#     template_name = 'first/todo_create.html'
+#     success_url = reverse_lazy('first:home')
+
+#     def form_valid(self, form):
+#         self.create_todo(form.cleaned_data)
+#         return super().form_valid(form)
+
+#     def create_todo(self, data):
+#         todo = Todo(title=data['title'], slug=slugify(data['title']))
+#         todo.save()
+#         messages.success(self.request, 'your todo added', 'success')
+
+
+class TodoCreateView(CreateView):
+    model = Todo
+    fields = ('title',)
     template_name = 'first/todo_create.html'
     success_url = reverse_lazy('first:home')
 
     def form_valid(self, form):
-        self.create_todo(form.cleaned_data)
-        return super().form_valid(form)
-
-    def create_todo(self, data):
-        todo = Todo(title=data['title'], slug=slugify(data['title']))
+        todo = form.save(commit=False)
+        todo.slug = slugify(form.cleaned_data['title'])
         todo.save()
         messages.success(self.request, 'your todo added', 'success')
+        return super().form_valid(form)
 
+
+class DeleteTodo(DeleteView):
+    model = Todo
+    template_name = 'first/todo_delete.html'
+    success_url = reverse_lazy('first:home')
+
+
+class UpdateTodo(UpdateView):
+    model = Todo
+    fields = ['title']
+    template_name = 'first/update_todo.html'
+    success_url = reverse_lazy('first:home')

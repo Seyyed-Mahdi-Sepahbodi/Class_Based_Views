@@ -4,6 +4,8 @@
     <h3>Home</h3><hr/>
     {% for todo in object_list %}
         <!-- <a href="{% url 'first:detail_todo' todo.id %}">{{ todo.title }}</a> -->
-        <a href="{% url 'first:detail_todo' todo.slug %}">{{ todo.title }}</a><br/><br/>
+        <a href="{% url 'first:detail_todo' todo.slug %}">{{ todo.title }}</a>
+        <a href="{% url 'first:delete_todo' todo.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'first:update_todo' todo.id %}" class="btn btn-warning">Update</a><br/><br/>
     {% endfor %}
 {% endblock content %}

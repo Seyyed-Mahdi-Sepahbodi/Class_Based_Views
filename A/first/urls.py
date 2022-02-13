@@ -13,5 +13,9 @@ urlpatterns = [
 
     # path('<int:pk>/', views.DetailTodo.as_view(), name='detail_todo'),
     path('<slug:myslug>/', views.DetailTodo.as_view(), name='detail_todo'),
+    
+    path('delete/<int:pk>', views.DeleteTodo.as_view(), name='delete_todo'),
+
+    path('update/<int:pk>', views.UpdateTodo.as_view(), name='update_todo'),
 
 ]
